@@ -63,7 +63,8 @@ static DEFINE_SPINLOCK(tz_lock);
 
 #define TAG "msm_adreno_tz: "
 
-struct msm_adreno_extended_profile *partner_gpu_profile;
+static struct msm_adreno_extended_profile *partner_gpu_profile;
+
 static void do_partner_start_event(struct work_struct *work);
 static void do_partner_stop_event(struct work_struct *work);
 static void do_partner_suspend_event(struct work_struct *work);
@@ -357,8 +358,6 @@ static int tz_start(struct devfreq *devfreq)
 		return -EINVAL;
 	}
 
-	gpu_profile->partner_wq = create_freezable_workqueue
-					("governor_msm_adreno_tz_wq");
 	INIT_WORK(&gpu_profile->partner_start_event_ws,
 					do_partner_start_event);
 	INIT_WORK(&gpu_profile->partner_stop_event_ws,
@@ -381,15 +380,10 @@ static int tz_start(struct devfreq *devfreq)
 static int tz_stop(struct devfreq *devfreq)
 {
 	struct devfreq_msm_adreno_tz_data *priv = devfreq->data;
-	struct msm_adreno_extended_profile *gpu_profile = container_of(
-					(devfreq->profile),
-					struct msm_adreno_extended_profile,
-					profile);
 
 	kgsl_devfreq_del_notifier(devfreq->dev.parent, &priv->nb);
 
-	flush_workqueue(gpu_profile->partner_wq);
-	destroy_workqueue(gpu_profile->partner_wq);
+	flush_workqueue(workqueue);
 
 	/* leaving the governor and cleaning the pointer to private data */
 	devfreq->data = NULL;
@@ -426,6 +420,11 @@ static int tz_handler(struct devfreq *devfreq, unsigned int event, void *data)
 		break;
 
 	case DEVFREQ_GOV_STOP:
+		/* Queue the stop work before the TZ is stopped */
+		if (partner_gpu_profile && partner_gpu_profile->bus_devfreq)
+			queue_work(workqueue,
+				&gpu_profile->partner_stop_event_ws);
+
 		result = tz_stop(devfreq);
 		break;
 
@@ -447,19 +446,15 @@ static int tz_handler(struct devfreq *devfreq, unsigned int event, void *data)
 	if (partner_gpu_profile && partner_gpu_profile->bus_devfreq)
 		switch (event) {
 		case DEVFREQ_GOV_START:
-			queue_work(gpu_profile->partner_wq,
+			queue_work(workqueue,
 					&gpu_profile->partner_start_event_ws);
 			break;
-		case DEVFREQ_GOV_STOP:
-			queue_work(gpu_profile->partner_wq,
-					&gpu_profile->partner_stop_event_ws);
-			break;
 		case DEVFREQ_GOV_SUSPEND:
-			queue_work(gpu_profile->partner_wq,
+			queue_work(workqueue,
 					&gpu_profile->partner_suspend_event_ws);
 			break;
 		case DEVFREQ_GOV_RESUME:
-			queue_work(gpu_profile->partner_wq,
+			queue_work(workqueue,
 					&gpu_profile->partner_resume_event_ws);
 			break;
 		}
@@ -504,18 +499,22 @@ static struct devfreq_governor msm_adreno_tz = {
 
 static int __init msm_adreno_tz_init(void)
 {
+	workqueue = create_freezable_workqueue("governor_msm_adreno_tz_wq");
+	if (workqueue == NULL)
+		return -ENOMEM;
+
 	return devfreq_add_governor(&msm_adreno_tz);
 }
 subsys_initcall(msm_adreno_tz_init);
 
 static void __exit msm_adreno_tz_exit(void)
 {
-	int ret;
-	ret = devfreq_remove_governor(&msm_adreno_tz);
+	int ret = devfreq_remove_governor(&msm_adreno_tz);
 	if (ret)
 		pr_err(TAG "failed to remove governor %d\n", ret);
 
-	return;
+	if (workqueue != NULL)
+		destroy_workqueue(workqueue);
 }
 
 module_exit(msm_adreno_tz_exit);
