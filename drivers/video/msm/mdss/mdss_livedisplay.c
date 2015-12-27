@@ -274,11 +274,11 @@ static void mdss_livedisplay_worker(struct work_struct *work)
 		pr_err("%s: error parsing DSI command! ret=%d", __func__, ret);
 	}
 
-out:
 	// Restore saved RGB settings
 	if (mlc->updated & MODE_RGB)
 		mdss_livedisplay_update_pcc(mlc);
 
+out:
 	mlc->updated = 0;
 	mutex_unlock(&mlc->lock);
 }
