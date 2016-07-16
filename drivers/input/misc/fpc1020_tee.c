@@ -998,6 +998,13 @@ static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 		input_sync(fpc1020->input_dev);
 	}
 
+	if (!fpc1020->screen_state) {
+		input_report_key(fpc1020->input_dev, KEY_FINGERPRINT, 1);
+		input_sync(fpc1020->input_dev);
+		input_report_key(fpc1020->input_dev, KEY_FINGERPRINT, 0);
+		input_sync(fpc1020->input_dev);
+	}
+
 	return IRQ_HANDLED;
 }
 
