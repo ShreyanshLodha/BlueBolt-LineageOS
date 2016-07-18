@@ -707,3 +707,5 @@ endif
 source "lib/Kconfig"
 
 source "arch/arm64/mm/Kconfig"
+
+source "arch/arm64/fastcharge/Kconfig"
