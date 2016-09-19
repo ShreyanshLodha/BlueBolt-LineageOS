@@ -55,6 +55,10 @@
 
 #include <linux/project_info.h>
 
+#ifdef CONFIG_BOEFFLA_TOUCH_KEY_CONTROL
+#include <linux/boeffla_touchkey_control.h>
+#endif
+
 #define FPC1020_RESET_LOW_US 1000
 #define FPC1020_RESET_HIGH1_US 100
 #define FPC1020_RESET_HIGH2_US 1250
@@ -298,6 +302,9 @@ static ssize_t report_home_set(struct device *dev,
         
 	if (!strncmp(buf, "down", strlen("down")))
 	{
+#ifdef CONFIG_BOEFFLA_TOUCH_KEY_CONTROL
+		btkc_touch_button();
+#endif
 #ifdef VENDOR_EDIT //WayneChang, 2015/12/02, add for key to abs, simulate key in abs through virtual key system
 		if(!virtual_key_enable){
 	 		input_report_key(fpc1020->input_dev,

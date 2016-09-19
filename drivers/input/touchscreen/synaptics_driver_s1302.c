@@ -57,6 +57,11 @@
 #include "synaptics_s1302_redremote.h"
 #include <linux/boot_mode.h>
 #include <linux/project_info.h>
+
+#ifdef CONFIG_BOEFFLA_TOUCH_KEY_CONTROL
+#include <linux/boeffla_touchkey_control.h>
+#endif
+
 /*------------------------------------------------Global Define--------------------------------------------*/
 #define TP_TEST_ENABLE 1
 #define SYNAPTICS_NAME "synaptics"
@@ -751,6 +756,9 @@ static void synaptics_ts_report(struct synaptics_ts_data *ts )
         //goto END;
     }
     if( inte & 0x10) {
+#ifdef CONFIG_BOEFFLA_TOUCH_KEY_CONTROL
+		btkc_touch_button();
+#endif
 #ifdef VENDOR_EDIT //WayneChang, 2015/12/29, add flag to enable virtual key
 	if(!virtual_key_enable){
 		int_key(ts);
