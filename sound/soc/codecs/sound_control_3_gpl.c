@@ -8,6 +8,8 @@
  * Pafcholini <pafcholini@gmail.com>
  * Thanks to Thehacker911 for the tip
  *
+ * added high performance mode toggle
+ *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
  * may be copied, distributed, and modified under those terms.
@@ -34,6 +36,8 @@ extern int wcd9xxx_hw_revision;
 
 static int snd_ctrl_locked = 2;
 static int snd_rec_ctrl_locked = 0;
+
+extern int high_perf_mode;
 
 unsigned int tomtom_read(struct snd_soc_codec *codec, unsigned int reg);
 int tomtom_write(struct snd_soc_codec *codec, unsigned int reg,
@@ -190,6 +194,26 @@ int snd_hax_reg_access(unsigned int reg)
 }
 EXPORT_SYMBOL(snd_hax_reg_access);
 
+static ssize_t hph_perf_show(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	size_t count = 0;
+
+	count += sprintf(buf, "%d\n", high_perf_mode);
+
+	return count;
+}
+
+static ssize_t hph_perf_store(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t count)
+{
+	if (buf[0] >= '0' && buf[0] <= '1' && buf[1] == '\n')
+		if (high_perf_mode != buf[0] - '0')
+			high_perf_mode = buf[0] - '0';
+
+	return count;
+}
+
 static ssize_t cam_mic_gain_show(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
 {
@@ -344,6 +368,12 @@ static struct kobj_attribute sound_reg_write_attribute =
 		NULL,
 		sound_reg_write_store);
 
+static struct kobj_attribute high_performance_mode_attribute =
+	__ATTR(highperf_enabled,
+		0666,
+		hph_perf_show,
+		hph_perf_store);
+
 static struct kobj_attribute cam_mic_gain_attribute =
 	__ATTR(gpl_cam_mic_gain,
 		0666,
@@ -370,6 +400,7 @@ static struct kobj_attribute headphone_gain_attribute =
 
 static struct attribute *sound_control_attrs[] =
 	{
+		&high_performance_mode_attribute.attr,
 		&cam_mic_gain_attribute.attr,
 		&mic_gain_attribute.attr,
 		&speaker_gain_attribute.attr,
