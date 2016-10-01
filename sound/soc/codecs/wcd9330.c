@@ -89,17 +89,8 @@ module_param(cpe_debug_mode, int,
 MODULE_PARM_DESC(cpe_debug_mode, "boot cpe in debug mode");
 
 static atomic_t kp_tomtom_priv;
-#ifndef VENDOR_EDIT
-//Kangjirui@MultMedia.Audio, 2015/05/14, Modify for change class h amp to class ab
-/*
-static int high_perf_mode;
-*/
-#else /* VENDOR_EDIT */
-static int high_perf_mode = 1;
-#endif /* VENDOR_EDIT */
 
-
-
+int high_perf_mode = 1;
 module_param(high_perf_mode, int,
 			S_IRUGO | S_IWUSR | S_IWGRP);
 MODULE_PARM_DESC(high_perf_mode, "enable/disable class AB config for hph");
