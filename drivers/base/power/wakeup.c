@@ -460,6 +460,37 @@ static void wakeup_source_deactivate(struct wakeup_source *ws)
 		wake_up(&wakeup_count_wait_queue);
 }
 
+static bool wakeup_source_blocker(struct wakeup_source *ws)
+{
+	unsigned int wslen = 0;
+
+	if (ws && ws->active) {
+		wslen = strlen(ws->name);
+
+		if ((!enable_ipa_ws && !strncmp(ws->name, "IPA_WS", wslen)) ||
+			(!enable_wlan_extscan_wl_ws &&
+				!strncmp(ws->name, "wlan_extscan_wl", wslen)) ||
+			(!enable_qcom_rx_wakelock_ws &&
+				!strncmp(ws->name, "qcom_rx_wakelock", wslen)) ||
+			(!enable_wlan_wow_wl_ws &&
+				!strncmp(ws->name, "wlan_wow_wl", wslen)) ||
+			(!enable_wlan_ws &&
+				!strncmp(ws->name, "wlan", wslen)) ||
+			(!enable_netmgr_wl_ws &&
+				!strncmp(ws->name, "netmgr_wl", wslen)) ||
+			(!enable_timerfd_ws &&
+				!strncmp(ws->name, "[timerfd]", wslen)) ||
+			(!enable_netlink_ws &&
+				!strncmp(ws->name, "NETLINK", wslen))) {
+			wakeup_source_deactivate(ws);
+			pr_info("forcefully deactivate wakeup source: %s\n", ws->name);
+			return true;
+		}
+	}
+
+	return false;
+}
+
 /**
  * wakeup_source_not_registered - validate the given wakeup source.
  * @ws: Wakeup source to be validated.
@@ -513,32 +544,13 @@ static bool wakeup_source_not_registered(struct wakeup_source *ws)
 static void wakeup_source_activate(struct wakeup_source *ws)
 {
 	unsigned int cec;
-	unsigned int wslen = strlen(ws->name);
 
 	if (WARN(wakeup_source_not_registered(ws),
 			"unregistered wakeup source\n"))
 		return;
 
-	if ((!enable_ipa_ws && !strncmp(ws->name, "IPA_WS", wslen)) ||
-		(!enable_wlan_extscan_wl_ws &&
-			!strncmp(ws->name, "wlan_extscan_wl", wslen)) ||
-		(!enable_qcom_rx_wakelock_ws &&
-			!strncmp(ws->name, "qcom_rx_wakelock", wslen)) ||
-		(!enable_wlan_wow_wl_ws &&
-                        !strncmp(ws->name, "wlan_wow_wl", wslen)) ||
-		(!enable_wlan_ws &&
-                        !strncmp(ws->name, "wlan", wslen)) ||
-		(!enable_timerfd_ws &&
-                        !strncmp(ws->name, "[timerfd]", wslen)) ||
-		(!enable_netlink_ws &&
-                        !strncmp(ws->name, "NETLINK", wslen)) ||
-		(!enable_netmgr_wl_ws &&
-                        !strncmp(ws->name, "netmgr_wl", wslen))) {
-		if (ws->active)
-			wakeup_source_deactivate(ws);
-
+	if (wakeup_source_blocker(ws))
 		return;
-	}
 
 	/*
 	 * active wakeup source should bring the system
@@ -781,7 +793,7 @@ void pm_get_active_wakeup_sources(char *pending_wakeup_source, size_t max)
 }
 EXPORT_SYMBOL_GPL(pm_get_active_wakeup_sources);
 
-static void print_active_wakeup_sources(void)
+void print_active_wakeup_sources(void)
 {
 	struct wakeup_source *ws;
 	int active = 0;
@@ -791,7 +803,9 @@ static void print_active_wakeup_sources(void)
 	list_for_each_entry_rcu(ws, &wakeup_sources, entry) {
 		if (ws->active) {
 			pr_info("active wakeup source: %s\n", ws->name);
-			active = 1;
+
+			if (!wakeup_source_blocker(ws))
+				active = 1;
 		} else if (!active &&
 			   (!last_activity_ws ||
 			    ktime_to_ns(ws->last_time) >
@@ -805,6 +819,7 @@ static void print_active_wakeup_sources(void)
 			last_activity_ws->name);
 	rcu_read_unlock();
 }
+EXPORT_SYMBOL_GPL(pm_print_active_wakeup_sources);
 
 /**
  * pm_wakeup_pending - Check if power transition in progress should be aborted.
