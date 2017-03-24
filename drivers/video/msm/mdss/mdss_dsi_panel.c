@@ -22,6 +22,7 @@
 #include <linux/qpnp/pwm.h>
 #include <linux/err.h>
 #include <linux/string.h>
+#include <linux/display_state.h>
 
 #include <linux/display_state.h>
 #include "mdss_dsi.h"
@@ -31,7 +32,6 @@
 #define DT_CMD_HDR 6
 #define MIN_REFRESH_RATE 30
 #define DEFAULT_MDP_TRANSFER_TIME 14000
-
 
 #ifdef VENDOR_EDIT
 #include <linux/boot_mode.h>
@@ -127,6 +127,13 @@ static void techeck_work_func( struct work_struct *work )
 }
 #endif
 #endif /*EDIT*/
+
+bool display_on = true;
+
+bool is_display_on()
+{
+	return display_on;
+}
 
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
