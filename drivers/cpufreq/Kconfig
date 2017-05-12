@@ -252,6 +252,12 @@ config FINGERPRINT_BOOST
 	  Boosts available CPUs to max frequency on fingerprint sensor input.
 
 
+config FINGERPRINT_BOOST
+	bool "Fingerprint Boost"
+	default y
+	help
+	  Boosts available CPUs to max frequency on fingerprint sensor input.
+
 config GENERIC_CPUFREQ_CPU0
 	tristate "Generic CPU0 cpufreq driver"
 	depends on HAVE_CLK && REGULATOR && PM_OPP && OF
