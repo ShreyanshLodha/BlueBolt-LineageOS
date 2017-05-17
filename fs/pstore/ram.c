@@ -83,7 +83,7 @@ module_param(dump_oops, int, 0600);
 MODULE_PARM_DESC(dump_oops,
 		"set to 1 to dump oopses, 0 to only dump panics (default 1)");
 
-static int ramoops_ecc;
+static int ramoops_ecc = 1;
 module_param_named(ecc, ramoops_ecc, int, 0600);
 MODULE_PARM_DESC(ramoops_ecc,
 		"if non-zero, the option enables ECC support and specifies "
@@ -363,6 +363,7 @@ static int __init of_ramoops_platform_data(struct device_node *node,
 	pdata->ftrace_size = ramoops_ftrace_size;
 	pdata->pmsg_size = ramoops_pmsg_size;
 	pdata->dump_oops = dump_oops;
+	pdata->ecc_info.ecc_size = ramoops_ecc == 1 ? 16 : ramoops_ecc;
 
 	return 0;
 }
