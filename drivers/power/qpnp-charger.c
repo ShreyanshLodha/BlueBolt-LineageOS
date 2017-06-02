@@ -1710,7 +1710,7 @@ qpnp_chg_coarse_det_usb_irq_handler(int irq, void *_chip)
 	return IRQ_HANDLED;
 }
 
-#define USB_WALL_THRESHOLD_MA	500
+#define USB_WALL_THRESHOLD_MA	1990
 #define ENUM_T_STOP_BIT		BIT(0)
 #define USB_5V_UV	5000000
 #define USB_9V_UV	9000000
