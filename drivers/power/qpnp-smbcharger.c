@@ -73,7 +73,7 @@ static int fake_authentic = 0;
 #define AUTO_CHARGING_BATT_TEMP_T3                            120
 #define AUTO_CHARGING_BATT_TEMP_T4                            220
 #define AUTO_CHARGING_BATT_TEMP_T5                            450
-#define AUTO_CHARGING_BATT_TEMP_T6                            550
+#define AUTO_CHARGING_BATT_TEMP_T6                            640
 #define AUTO_CHARGING_BATT_REMOVE_TEMP                        -200
 #define AUTO_CHARGING_BATTERY_TEMP_HYST_FROM_HOT_TO_WARM      20
 #define AUTO_CHARGING_BATTERY_TEMP_HYST_FROM_WARM_TO_NORMAL   20
