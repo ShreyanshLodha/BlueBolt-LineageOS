@@ -122,7 +122,7 @@ static ssize_t speaker_gain_show(struct kobject *kobj,
 {
         return sprintf(buf, "%u %u",
 			tomtom_read(fauxsound_codec_ptr,
-				TOMTOM_A_CDC_RX7_VOL_CTL_B2_CTL),
+				TOMTOM_A_CDC_RX3_VOL_CTL_B2_CTL),
 			tomtom_read(fauxsound_codec_ptr,
 				TOMTOM_A_CDC_RX7_VOL_CTL_B2_CTL));
 
@@ -137,7 +137,7 @@ static ssize_t speaker_gain_store(struct kobject *kobj,
 
 	if (calc_checksum(lval, rval, chksum)) {
 		tomtom_write(fauxsound_codec_ptr,
-			TOMTOM_A_CDC_RX7_VOL_CTL_B2_CTL, lval);
+			TOMTOM_A_CDC_RX3_VOL_CTL_B2_CTL, lval);
 		tomtom_write(fauxsound_codec_ptr,
 			TOMTOM_A_CDC_RX7_VOL_CTL_B2_CTL, rval);
 	}
@@ -221,13 +221,13 @@ static struct kobj_attribute high_performance_mode_attribute =
 		hph_perf_store);
 
 static struct kobj_attribute cam_mic_gain_attribute =
-	__ATTR(gpl_cam_mic_gain,
+	__ATTR(gpl_cam_mic_gain_broken,
 		0666,
 		cam_mic_gain_show,
 		cam_mic_gain_store);
 
 static struct kobj_attribute mic_gain_attribute =
-	__ATTR(gpl_mic_gain,
+	__ATTR(gpl_mic_gain_broken,
 		0666,
 		mic_gain_show,
 		mic_gain_store);
