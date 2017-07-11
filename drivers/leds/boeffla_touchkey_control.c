@@ -66,7 +66,7 @@
 // Declarations
 /*****************************************/
 
-int btkc_mode    = MODE_NORMAL;		// normal mode is default
+int btkc_mode    = MODE_TOUCHKEY_ONLY;		// Touch key mode by default (changed)
 int btkc_timeout = TIMEOUT_DEFAULT;	// default is rom controlled timeout
 
 int isScreenTouched = 0;
