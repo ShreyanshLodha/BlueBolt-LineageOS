@@ -58,7 +58,7 @@ module_param(sysctl_thermal_aware_scheduling, uint, 0644);
 static unsigned int sync_threshold;
 module_param(sync_threshold, uint, 0644);
 
-static unsigned int input_boost_enabled = 1;
+static unsigned int input_boost_enabled = 0;
 module_param(input_boost_enabled, uint, 0644);
 
 static unsigned int input_boost_ms = 40;
