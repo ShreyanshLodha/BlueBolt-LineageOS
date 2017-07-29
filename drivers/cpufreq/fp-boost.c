@@ -31,6 +31,8 @@
 #include <linux/input.h>
 #include <linux/slab.h>
 
+#include <linux/screen_off_max_freq.h>
+
 /* Available bits for boost_policy state */
 #define DRIVER_ENABLED        (1U << 0)
 #define FINGERPRINT_BOOST           (1U << 1)
@@ -125,9 +127,9 @@ static int do_cpu_boost(struct notifier_block *nb,
 
 	/* Boost CPU to max frequency for fingerprint boost */
 	if (state & FINGERPRINT_BOOST) {
-		pr_info("Boosting\n");
-		policy->cur = policy->max;
-		policy->min = policy->max;
+		policy->cur = screen_off_max_freq;
+		policy->min = screen_off_max_freq;
+		pr_info("Boost at Freq %u, %u\n",policy->cur,policy->min);
 		return NOTIFY_OK;
 	}
 
