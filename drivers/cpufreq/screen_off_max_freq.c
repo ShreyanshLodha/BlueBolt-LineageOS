@@ -1,4 +1,5 @@
-/*
+/* drivers/cpufreq/screen_off_max_freq.c
+ * 
  * Author: Shreyansh Lodha <slodha96@gmail.com>
  *
  * This software is licensed under the terms of the GNU General Public

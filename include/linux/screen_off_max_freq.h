@@ -1,5 +1,5 @@
 /*
- * include/linux/display_state.h
+ * include/linux/screen_off_max_freq.h
  *
  * Copyright (c) 2017 Shreyansh Lodha
  * slodha96@gmail.com
