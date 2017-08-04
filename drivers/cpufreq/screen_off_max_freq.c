@@ -18,7 +18,7 @@
 #include <linux/sysfs.h>
 #include <linux/screen_off_max_freq.h>
 
-unsigned int screen_off_max_freq=1248000;
+unsigned int screen_off_max_freq=960000;
 
 static struct kobject *screen_off_kobject;
 
