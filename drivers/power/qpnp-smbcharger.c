@@ -1062,7 +1062,7 @@ static int get_prop_batt_capacity(struct smbchg_chip *chip)
 
 #ifdef  VENDOR_EDIT
 #define MAX_COUNT	500
-#define SOFT_AICL_VOL	4465   //4555
+#define SOFT_AICL_VOL	4370   //4555
 #define SOFT_AICL_DELAY_MS 2000
 
 static int soft_aicl(struct smbchg_chip *chip)
