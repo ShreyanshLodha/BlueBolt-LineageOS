@@ -63,6 +63,7 @@ struct cpu_data {
 	unsigned int min_cpus;
 	unsigned int max_cpus;
 	unsigned int offline_delay_ms;
+	unsigned int online_delay_ms;
 	unsigned int busy_up_thres[MAX_CPUS_PER_GROUP];
 	unsigned int busy_down_thres[MAX_CPUS_PER_GROUP];
 	unsigned int online_cpus;
@@ -149,6 +150,20 @@ static ssize_t store_offline_delay_ms(struct cpu_data *state,
 	return count;
 }
 
+static ssize_t store_online_delay_ms(struct cpu_data *state,
+					const char *buf, size_t count)
+{
+	unsigned int val;
+
+	if (kstrtouint(buf, 0, &val))
+		return -EINVAL;
+
+	state->online_delay_ms = val;
+	apply_need(state);
+
+	return count;
+}
+
 static ssize_t show_task_thres(struct cpu_data *state, char *buf)
 {
 	return snprintf(buf, PAGE_SIZE, "%u\n", state->task_thres);
@@ -174,6 +189,11 @@ static ssize_t store_task_thres(struct cpu_data *state,
 static ssize_t show_offline_delay_ms(struct cpu_data *state, char *buf)
 {
 	return snprintf(buf, PAGE_SIZE, "%u\n", state->offline_delay_ms);
+}
+
+static ssize_t show_online_delay_ms(struct cpu_data *state, char *buf)
+{
+	return snprintf(buf, PAGE_SIZE, "%u\n", state->online_delay_ms);
 }
 
 static ssize_t store_busy_up_thres(struct cpu_data *state,
@@ -376,6 +396,7 @@ __ATTR(_name, 0644, show_##_name, store_##_name)
 core_ctl_attr_rw(min_cpus);
 core_ctl_attr_rw(max_cpus);
 core_ctl_attr_rw(offline_delay_ms);
+core_ctl_attr_rw(online_delay_ms);
 core_ctl_attr_rw(busy_up_thres);
 core_ctl_attr_rw(busy_down_thres);
 core_ctl_attr_rw(task_thres);
@@ -390,6 +411,7 @@ static struct attribute *default_attrs[] = {
 	&min_cpus.attr,
 	&max_cpus.attr,
 	&offline_delay_ms.attr,
+	&online_delay_ms.attr,
 	&busy_up_thres.attr,
 	&busy_down_thres.attr,
 	&task_thres.attr,
@@ -578,10 +600,15 @@ static bool eval_need(struct cpu_data *f)
 		return 0;
 	}
 
+	s64 elapsed = now - f->need_ts;
 	if (need_cpus > last_need) {
-		ret = 1;
+		if (elapsed >= f->online_delay_ms) {
+			ret = 1;
+		} else {
+			mod_timer(&f->timer, jiffies +
+				  msecs_to_jiffies(f->online_delay_ms));
+		}
 	} else if (need_cpus < last_need) {
-		s64 elapsed = now - f->need_ts;
 		if (elapsed >= f->offline_delay_ms) {
 			ret = 1;
 		} else {
@@ -959,6 +986,7 @@ static int group_init(struct cpumask *mask)
 	f->need_cpus  = f->num_cpus;
 	f->avail_cpus  = f->num_cpus;
 	f->offline_delay_ms = 100;
+	f->online_delay_ms = 500;
 	f->task_thres = UINT_MAX;
 	f->nrrun = f->num_cpus;
 	INIT_LIST_HEAD(&f->lru);
