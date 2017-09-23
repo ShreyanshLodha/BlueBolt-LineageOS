@@ -30,7 +30,7 @@
 #include <linux/cpufreq.h>
 #include <linux/input.h>
 #include <linux/slab.h>
-
+#include <linux/display_state.h>
 #include <linux/screen_off_max_freq.h>
 
 /* Available bits for boost_policy state */
@@ -115,6 +115,12 @@ static int do_cpu_boost(struct notifier_block *nb,
 	if (action != CPUFREQ_ADJUST)
 		return NOTIFY_OK;
 
+	// This check will avoid sequential boost and will also avoid setting CPU at low freq in case the CPU is already at higher freq.
+	if (policy->cur >= screen_off_max_freq || policy->min >= screen_off_max_freq){
+		pr_info("Skipped Boosting");
+		return NOTIFY_OK;
+	}
+
 	state = get_boost_state(b);
 
 	/*
@@ -147,6 +153,9 @@ static void cpu_fp_input_event(struct input_handle *handle, unsigned int type,
 	struct boost_policy *b = boost_policy_g;
 	struct fp_config *fp = &b->fp;
 	uint32_t state;
+
+	if (is_display_on())
+		return;
 
 	state = get_boost_state(b);
 
@@ -392,4 +401,3 @@ free_mem:
 	return ret;
 }
 late_initcall(cpu_fp_init);
-
