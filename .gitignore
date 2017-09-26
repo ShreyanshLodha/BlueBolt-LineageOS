@@ -32,6 +32,7 @@ modules.builtin
 *.lzo
 *.patch
 *.gcno
+AnyKernel2/Image.gz-dtb
 
 #
 # Top-level generic files
