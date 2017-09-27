@@ -87,5 +87,3 @@ on property:dev.bootcomplete=1
     write /sys/module/wakeup/parameters/enable_netmgr_wl_ws 0
 
     write /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster 1
-    write /sys/devices/system/cpu/cpu0/core_ctl/online_cpus 3
-    write /sys/devices/system/cpu/cpu4/core_ctl/online_cpus 0
