@@ -168,7 +168,7 @@ int DouSwip_gesture = 1; // "||"
 int Circle_gesture = 1; // "O"
 int UpVee_gesture = 1; //"V"
 int DownVee_gesture = 1; //"^"
-int DouTap_gesture = 0; //"double tap"
+int DouTap_gesture = 1; //"double tap"
 
 int Left2RightSwip_gesture = 0; //"(-->)"
 int Right2LeftSwip_gesture = 0; //"(<--)"
@@ -403,7 +403,8 @@ static int oem_synaptics_ts_probe(struct i2c_client *client, const struct i2c_de
 	//spinlock_t oem_lock;
 	optimize_data.client = client;
 	optimize_data.dev_id = id;
-	optimize_data.workqueue = create_workqueue("tpd_probe_optimize");
+	optimize_data.workqueue = alloc_workqueue("tpd_probe_optimize", WQ_HIGHPRI |
+			WQ_MEM_RECLAIM, 1);
 	INIT_DELAYED_WORK(&(optimize_data.work), synaptics_ts_probe_func);
 	printk("boot_time: before optimize [synaptics_ts_probe]  on cpu %d\n",smp_processor_id());
 	//spin_lock_irqsave(&oem_lock, flags);
@@ -1396,10 +1397,10 @@ static enum hrtimer_restart synaptics_ts_timer_func(struct hrtimer *timer)
 static irqreturn_t synaptics_irq_thread_fn(int irq, void *dev_id)
 {
 	struct synaptics_ts_data *ts = (struct synaptics_ts_data *)dev_id;
-
-	touch_disable(ts);
+	mutex_lock(&ts->mutex);
+    touch_disable(ts);
 	queue_work(synaptics_report, &ts->report_work);
-
+	mutex_unlock(&ts->mutex);
 	return IRQ_HANDLED;
 }
 #endif
@@ -2499,6 +2500,7 @@ static int	synaptics_input_init(struct synaptics_ts_data *ts)
 
 #ifdef SUPPORT_GESTURE
 	set_bit(KEY_F4 , ts->input_dev->keybit);//doulbe-tap resume
+	set_bit(BTN_TOOL_FINGER, ts->input_dev->keybit);
 #ifdef VENDOR_EDIT
 	set_bit(KEY_DOUBLE_TAP, ts->input_dev->keybit);
 	set_bit(KEY_GESTURE_CIRCLE, ts->input_dev->keybit);
@@ -3585,6 +3587,7 @@ static int synaptics_ts_probe(struct i2c_client *client, const struct i2c_device
 	}
 #if defined(CONFIG_FB)
 	ts->fb_notif.notifier_call = fb_notifier_callback;
+	ts->fb_notif.priority = INT_MAX;
 	ret = fb_register_client(&ts->fb_notif);
 	if(ret)
 		TPD_ERR("Unable to register fb_notifier: %d\n", ret);
