@@ -69,8 +69,8 @@ ui_print "     BBB     BBB          BBB     BBB             ";
 ui_print "     BBBBBBBB             BBBBBBBB                ";
 ui_print "                                                  ";
 ui_print "--------------------------------------------------";
-ui_print "BlueBolt Kernel for Lineage Based ROMs";
-ui_print "RC 2.4";
+ui_print "BlueBolt Kernel for ANDROID 8.0.0 Oreo";
+ui_print "Beta 3.0";
 ui_print "By -Shreyansh Lodha";
 
 if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.devicecheck)" == 1 ]; then
