@@ -140,7 +140,7 @@ struct test_header {
 #define Wgestrue            13  // W
 
 // carlo@oneplus.net 2015-05-25, begin.
-#ifdef VENDOR_EDIT`
+#ifdef VENDOR_EDIT
 #define KEY_DOUBLE_TAP				KEY_WAKEUP
 #define KEY_GESTURE_CIRCLE			250
 #define KEY_GESTURE_TWO_SWIPE		251
