@@ -140,5 +140,5 @@ on property:persist.spectrum.profile=3
    write /sys/class/misc/btk_control/btkc_mode 0
    write /sys/class/misc/btk_control/btkc_timeout 0
    write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 2
-   write /sys/class/kgsl/kgsl-3d0/devfreq/default_pwrlevel 5
+   write /sys/class/kgsl/kgsl-3d0/devfreq/default_pwrlevel 6
    write /sys/class/kgsl/kgsl-3d0/devfreq/max_pwrlevel 0
