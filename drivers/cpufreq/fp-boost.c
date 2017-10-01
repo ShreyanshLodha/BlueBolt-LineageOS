@@ -117,7 +117,6 @@ static int do_cpu_boost(struct notifier_block *nb,
 
 	// This check will avoid sequential boost and will also avoid setting CPU at low freq in case the CPU is already at higher freq.
 	if (policy->cur >= screen_off_max_freq || policy->min >= screen_off_max_freq){
-		pr_info("Skipped Boosting");
 		return NOTIFY_OK;
 	}
 
