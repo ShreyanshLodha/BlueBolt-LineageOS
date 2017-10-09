@@ -24,8 +24,6 @@ on property:persist.spectrum.profile=2
    write /sys/devices/system/cpu/cpu0/cpufreq/relaxed/down_threshold_suspended 85
    write /sys/devices/system/cpu/cpu0/cpufreq/relaxed/up_threshold 75
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor relaxed
-   write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 302000
-   write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1440000
    write /sys/devices/system/cpu/cpu4/cpufreq/chill/boost_count 12
    write /sys/devices/system/cpu/cpu4/cpufreq/chill/freq_step 4
    write /sys/devices/system/cpu/cpu4/cpufreq/chill/down_threshold 75
@@ -36,7 +34,7 @@ on property:persist.spectrum.profile=2
    write /sys/devices/system/cpu/cpu4/core_ctl/online_cpus 0
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor relaxed
    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 302000
-   write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 960000
+   write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1248000
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 302000
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1248000
    write /sys/module/mdss_fb/parameters/backlight_dimmer 1
@@ -64,7 +62,6 @@ on property:persist.spectrum.profile=0
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor relaxed
    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 0
    write /sys/devices/system/cpu/cpu4/core_ctl/online_cpus 0
-   write /sys/devices/system/cpu/cpu4/core_ctl/need_cpus 0
    write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 3
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 302000
    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1248000
@@ -81,7 +78,7 @@ on property:persist.spectrum.profile=0
    write /sys/class/misc/btk_control/btkc_timeout 500
    write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 0
    write /sys/class/kgsl/kgsl-3d0/devfreq/default_pwrlevel 6
-   write /sys/class/kgsl/kgsl-3d0/devfreq/max_pwrlevel 2
+   write /sys/class/kgsl/kgsl-3d0/devfreq/max_pwrlevel 6
    write /sys/kernel/fp_boost/enabled 1
    write /sys/kernel/screen_off/screen_off_max_freq 1248000
 
@@ -92,7 +89,6 @@ on property:persist.spectrum.profile=1
    write /sys/devices/system/cpu/cpu0/cpufreq/electron/boost 0
    write /sys/devices/system/cpu/cpu4/online 1
    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 1
-   write /sys/devices/system/cpu/cpu4/core_ctl/need_cpus 1
    write /sys/devices/system/cpu/cpu4/core_ctl/online_cpus 1
    write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 4
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor electron
