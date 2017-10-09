@@ -397,6 +397,7 @@ struct sock {
 #endif
 	__u32			sk_mark;
 	u32			sk_classid;
+	kuid_t			sk_uid;
 	struct cg_proto		*sk_cgrp;
 	void			(*sk_state_change)(struct sock *sk);
 	void			(*sk_data_ready)(struct sock *sk, int bytes);
