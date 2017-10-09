@@ -24,7 +24,6 @@
 #include <linux/string.h>
 #include <linux/display_state.h>
 
-#include <linux/display_state.h>
 #include "mdss_dsi.h"
 #include "mdss_mdp.h"
 #include "mdss_livedisplay.h"
@@ -128,14 +127,14 @@ static void techeck_work_func( struct work_struct *work )
 #endif
 #endif /*EDIT*/
 
-DEFINE_LED_TRIGGER(bl_led_trigger);
-
 bool display_on = true;
 
 bool is_display_on()
 {
 	return display_on;
 }
+
+DEFINE_LED_TRIGGER(bl_led_trigger);
 
 void mdss_dsi_panel_pwm_cfg(struct mdss_dsi_ctrl_pdata *ctrl)
 {
@@ -2061,11 +2060,11 @@ static int mdss_dsi_panel_parse_display_timings(struct device_node *np,
 		 * timings directly from root node instead
 		 */
 		pr_debug("reading display-timings from panel node\n");
-		rc = mdss_dsi_panel_timing_from_dt(np, &pt);
+		rc = mdss_dsi_panel_timing_from_dt(np, pt);
 		if (!rc) {
 			mdss_dsi_panel_config_res_properties(np,
-				panel_data->panel_info.sim_panel_mode, &pt);
-			rc = mdss_dsi_panel_timing_switch(ctrl, &pt.timing);
+				panel_data->panel_info.sim_panel_mode, pt);
+			rc = mdss_dsi_panel_timing_switch(ctrl, &pt->timing);
 		} else {
 			kfree(pt);
 		}
