@@ -128,13 +128,6 @@ static void techeck_work_func( struct work_struct *work )
 #endif
 #endif /*EDIT*/
 
-bool display_on = true;
-
-bool is_display_on()
-{
-	return display_on;
-}
-
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
 bool display_on = true;
