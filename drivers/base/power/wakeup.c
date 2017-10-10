@@ -40,6 +40,8 @@ static bool enable_netmgr_wl_ws = true;
 module_param(enable_netmgr_wl_ws, bool, 0644);
 static bool enable_nlp_wakelock_wl = true;
 module_param(enable_nlp_wakelock_wl, bool, 0644);
+static bool enable_nlp_collector_wakelock_wl = true;
+module_param(enable_nlp_collector_wakelock_wl, bool, 0644);
 
 /*
  * If set, the suspend/hibernate code will abort transitions to a sleep state
@@ -485,6 +487,8 @@ static bool wakeup_source_blocker(struct wakeup_source *ws)
 				!strncmp(ws->name, "[timerfd]", wslen)) ||
 			(!enable_nlp_wakelock_wl && 
 				!strncmp(ws->name, "NlpWakeLock", wslen)) ||
+			(!enable_nlp_collector_wakelock_wl && 
+				!strncmp(ws->name, "NlpCollectorWakeLock", wslen)) ||
 			(!enable_netlink_ws &&
 				!strncmp(ws->name, "NETLINK", wslen))) {
 			if (ws->active) {
