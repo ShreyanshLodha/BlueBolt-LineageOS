@@ -14,6 +14,7 @@
  ** 	<author>	<data>			<desc>
  **  chenggang.li@BSP.TP modified for oem 2014-07-30 14005 tp_driver
  ************************************************************************************/
+#include <linux/qpnp/pwm.h>
 #include <linux/of_gpio.h>
 #include <linux/irq.h>
 #include <linux/i2c.h>
@@ -58,6 +59,7 @@
 #include <linux/boot_mode.h>
 #include <linux/project_info.h>
 #include "synaptics_baseline.h"
+
 /*------------------------------------------------Global Define--------------------------------------------*/
 
 #define TP_UNKNOWN 0
@@ -89,6 +91,8 @@
 
 #define TEST_MAGIC1 0x494D494C
 #define TEST_MAGIC2 0x474D4954
+
+#define VIBRATE 25
 
 struct test_header {
 	unsigned int magic1;
@@ -1155,6 +1159,9 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 
 	synaptics_get_coordinate_point(ts);
 
+if(gesture == DouTap && DouTap_gesture)
+		call_vibrate(VIBRATE);
+
 	if (gesture_enabled(gesture)) {
 		keyCode = gesture == DouTap ? KEY_WAKEUP : 248 + gesture;
 		gesture_upload = gesture;
@@ -1162,6 +1169,9 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 		input_sync(ts->input_dev);
 		input_report_key(ts->input_dev, keyCode, 0);
 		input_sync(ts->input_dev);
+		
+		if (gesture == DouTap)
+			call_vibrate(VIBRATE);
 	} else {
 		ret = i2c_smbus_read_i2c_block_data( ts->client, F12_2D_CTRL20, 3, &(reportbuf[0x0]) );
 		ret = reportbuf[2] & 0x20;

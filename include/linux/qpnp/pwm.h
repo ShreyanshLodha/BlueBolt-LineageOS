@@ -186,4 +186,6 @@ int pwm_enable_synchronized(struct pwm_device **pwms, size_t num);
  * @pwm: the PWM device
  */
 
+void call_vibrate(int vibrate);
+
 #endif /* __QPNP_PWM_H__ */
