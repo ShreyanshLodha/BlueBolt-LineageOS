@@ -181,4 +181,6 @@ int pwm_config_us(struct pwm_device *pwm,
  * @pwm: the PWM device
  */
 
+void call_vibrate(int vibrate);
+
 #endif /* __QPNP_PWM_H__ */

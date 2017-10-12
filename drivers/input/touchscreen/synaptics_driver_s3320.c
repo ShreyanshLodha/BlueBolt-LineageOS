@@ -53,7 +53,7 @@
 #endif
 
 #include <linux/input/mt.h>
-
+#include <linux/qpnp/pwm.h>
 #include "synaptics_redremote.h"
 #include <linux/boot_mode.h>
 #include "synaptics_baseline.h"
@@ -135,6 +135,8 @@ static unsigned int enabled_gestures = 1;
 #endif
 int syna_use_gesture = 0;
 EXPORT_SYMBOL(syna_use_gesture);
+
+#define VIBRATE 25
 
 /*********************for Debug LOG switch*******************/
 #define TPD_ERR(a, arg...)  pr_err(TPD_DEVICE ": " a, ##arg)
@@ -1106,8 +1108,7 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 	//detect the gesture mode
 	switch (gesture_sign) {
 		case DTAP_DETECT:
-			//#ifdef VENDOR_EDIT, ruanbanmao@bsp 2015-05-06, begin.
-			    gesture = DouTap;
+			gesture = DouTap;
 			break;
 		case SWIPE_DETECT:
 			gesture = (regswipe == 0x41) ? Left2RightSwip   :
@@ -1145,6 +1146,8 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 			input_report_key(ts->input_dev, keyCode, 0);
 			input_sync(ts->input_dev);
 		}
+		if(gesture == DouTap && enabled_gestures)
+			call_vibrate(VIBRATE);
 	} else {
 		ret = i2c_smbus_read_i2c_block_data( ts->client, F12_2D_CTRL20, 3, &(reportbuf[0x0]) );
 		ret = reportbuf[2] & 0x20;
