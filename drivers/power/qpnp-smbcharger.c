@@ -4279,7 +4279,7 @@ static bool is_src_detect_high(struct smbchg_chip *chip)
 }
 
 #define HVDCP_NOTIFY_MS		2500
-#define DEFAULT_WALL_CHG_MA	1800
+#define DEFAULT_WALL_CHG_MA	1980
 /* david.liu@oneplus.tw,20151217  Modify the default intput current to 500mA for SDP */
 #ifdef VENDOR_EDIT
 #define DEFAULT_SDP_MA		500
