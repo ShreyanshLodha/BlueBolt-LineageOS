@@ -13,7 +13,6 @@ on property:sys.boot_completed=1
    setprop persist.spectrum.kernel BlueBolt
 
 
-
 # Battery
 on property:persist.spectrum.profile=2
    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor relaxed
@@ -48,11 +47,6 @@ on property:persist.spectrum.profile=2
    write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 0
    write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 3
    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 8
-   write /sys/module/adreno_idler/parameters/adreno_idler_downdifferential 20
-   write /sys/module/adreno_idler/parameters/adreno_idler_idlewait 15
-   write /sys/module/adreno_idler/parameters/adreno_idler_idleworkload 5000
-   write /sys/module/msm_thermal/core_control/enabled 1
-   
 
 
 # Balance (default profile)
@@ -80,12 +74,6 @@ on property:persist.spectrum.profile=0
    write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 0
    write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 2
    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 8
-   write /sys/module/adreno_idler/parameters/adreno_idler_active 1
-   write /sys/module/adreno_idler/parameters/adreno_idler_downdifferential 20
-   write /sys/module/adreno_idler/parameters/adreno_idler_idlewait 15 
-   write /sys/module/adreno_idler/parameters/adreno_idler_idleworkload 3500
-   write /sys/module/msm_thermal/core_control/enabled 0
-
    
 # Performance 
 on property:persist.spectrum.profile=1
@@ -111,7 +99,6 @@ on property:persist.spectrum.profile=1
    write /sys/class/kgsl/kgsl-3d0/max_gpuclk 510000000
    write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 0
    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 7
-   write /sys/module/msm_thermal/core_control/enabled 0
 
 
 # Gaming
@@ -137,4 +124,3 @@ on property:persist.spectrum.profile=3
    write /sys/class/kgsl/kgsl-3d0/max_gpuclk 630000000
    write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 0
    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 7
-   write /sys/module/msm_thermal/core_control/enabled 0

@@ -15,7 +15,7 @@
 #define KGSL_CLK_GFX_GTCU   0x00000100
 #define KGSL_CLK_GFX_GTBU   0x00000200
 
-#define KGSL_MAX_PWRLEVELS 10
+#define KGSL_MAX_PWRLEVELS 11
 
 #define KGSL_3D0_REG_MEMORY	"kgsl_3d0_reg_memory"
 #define KGSL_3D0_SHADER_MEMORY	"kgsl_3d0_shader_memory"
