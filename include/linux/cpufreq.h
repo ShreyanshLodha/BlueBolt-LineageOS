@@ -490,6 +490,7 @@ static inline int cpufreq_generic_exit(struct cpufreq_policy *policy)
  *********************************************************************/
 
 void acct_update_power(struct task_struct *p, cputime_t cputime);
+void msm_do_pm_boost(bool do_boost);
 
 #ifdef CONFIG_TASK_CPUFREQ_STATS
 void update_time_in_state(struct task_struct *p, int cpu);
