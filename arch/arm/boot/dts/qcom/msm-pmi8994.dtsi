@@ -223,13 +223,13 @@
 			#size-cells = <1>;
 
 			qcom,iterm-ma = <150>;
-			qcom,fastchg-current-ma = <500>;
+			qcom,fastchg-current-ma = <1950>;
 			qcom,float-voltage-mv = <4320>;
 			qcom,resume-delta-mv = <100>;
             //            qcom,chg-inhibit-en;
 			qcom,chg-inhibit-fg;
 			qcom,dc-psy-type = "Mains";
-			qcom,dc-psy-ma = <1500>;
+			qcom,dc-psy-ma = <1950>;
 			qcom,rparasitic-uohm = <100000>;
 			qcom,bms-psy-name = "bms";
 			qcom,thermal-mitigation = <2000 1000 900 800>;
