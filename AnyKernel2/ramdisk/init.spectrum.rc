@@ -89,12 +89,12 @@ on property:persist.spectrum.profile=0
    
 # Performance 
 on property:persist.spectrum.profile=1
-   write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor electron
+   write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1555200
    write /sys/devices/system/cpu/cpu0/cpufreq/electron/boost 0
    write /sys/devices/system/cpu/cpu4/online 1
-   write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor electron
+   write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
    write /sys/devices/system/cpu/cpu4/cpufreq/electron/boost 1
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 302400
    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1536000
@@ -138,4 +138,3 @@ on property:persist.spectrum.profile=3
    write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 0
    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 7
    write /sys/module/msm_thermal/core_control/enabled 0
-
