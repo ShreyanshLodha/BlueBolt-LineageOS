@@ -1159,9 +1159,6 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 
 	synaptics_get_coordinate_point(ts);
 
-if(gesture == DouTap && DouTap_gesture)
-		call_vibrate(VIBRATE);
-
 	if (gesture_enabled(gesture)) {
 		keyCode = gesture == DouTap ? KEY_WAKEUP : 248 + gesture;
 		gesture_upload = gesture;
