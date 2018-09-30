@@ -3596,9 +3596,9 @@ static int android_bind(struct usb_composite_dev *cdev)
 	device_desc.iProduct = id;
 
 	/* Default strings - should be updated by userspace */
-	strlcpy(manufacturer_string, "Android",
+	strlcpy(manufacturer_string, "OnePlus",
 		sizeof(manufacturer_string) - 1);
-	strlcpy(product_string, "OnePlus", sizeof(product_string) - 1);
+	strlcpy(product_string, "OnePlus 2", sizeof(product_string) - 1);
 	strlcpy(serial_string, "0123456789ABCDEF", sizeof(serial_string) - 1);
 
 	id = usb_string_id(cdev);
