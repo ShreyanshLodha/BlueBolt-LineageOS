@@ -1,0 +1,51 @@
+Manifest-Version: 1.0
+Created-By: 1.0 (Android SignApk)
+
+Name: META-INF/com/google/android/updater-script
+SHA1-Digest: surH1Bs4hR30JclyYkFBB7d7164=
+
+Name: Image.gz-dtb
+SHA1-Digest: 7oTJHfm8GnpLYsSYNZ5Hun4uiXs=
+
+Name: anykernel.sh
+SHA1-Digest: nWSTUMInV6JlRJXwIxbjB4DzeRQ=
+
+Name: META-INF/com/google/android/update-binary
+SHA1-Digest: ZWyHSMUOGfKSKAQo0/I+VEINxY4=
+
+Name: ramdisk/init.spectrum.sh
+SHA1-Digest: 4YyZEARS9+GZA2DAhh3C84V0/qg=
+
+Name: tools/busybox
+SHA1-Digest: gNr/chjP1TlQO5Bg60zKoWxqW4g=
+
+Name: ramdisk/init.special_power.sh
+SHA1-Digest: T4Edk9XczOYvaAhK8GOkfMt0Tmk=
+
+Name: ramdisk/init.spectrum.rc
+SHA1-Digest: mLd/qyrttfBTXzfRPXusdU86o3c=
+
+Name: tools/sepolicy-inject
+SHA1-Digest: D+a4r6oeSglZJq/+Ica/+NgkMZ8=
+
+Name: tools/mkbootimg
+SHA1-Digest: D8ioYO2wDO6xcUgyl6fwZyk/yxo=
+
+Name: tools/unpackbootimg
+SHA1-Digest: hBtcyVZJFl9Vbdn5WCtS7er/X4A=
+
+Name: ramdisk/init.supolicy.sh
+SHA1-Digest: lQ8nN8cXb5dPzHsogX9DaMeBPbs=
+
+Name: tools/getprop
+SHA1-Digest: xKRccFHNlevPScIisAjdRVDXEdw=
+
+Name: ramdisk/sbin/bb/busybox
+SHA1-Digest: gNr/chjP1TlQO5Bg60zKoWxqW4g=
+
+Name: tools/thermal-engine.conf
+SHA1-Digest: ZICIGicN6vp+6gHeSFLaO1jXtf4=
+
+Name: ramdisk/init.bluebolt.rc
+SHA1-Digest: YA3679Qq7oPYFMzCYdLFzWLxlg8=
+

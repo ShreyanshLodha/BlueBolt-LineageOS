@@ -1,0 +1,125 @@
+#!/sbin/sh
+# AnyKernel2 Backend
+
+OUTFD=/proc/self/fd/$2;
+ZIP="$3";
+DIR=`dirname "$ZIP"`;
+
+ui_print() {
+  until [ ! "$1" ]; do
+    echo -e "ui_print $1\nui_print" > $OUTFD;
+    shift;
+  done;
+}
+show_progress() { echo "progress $1 $2" > $OUTFD; }
+set_perm_recursive() {
+  dirs=$(echo $* | $bb awk '{ print substr($0, index($0,$5)) }');
+  for i in $dirs; do
+    chown -R $1.$2 $i; chown -R $1:$2 $i;
+    find "$i" -type d -exec chmod $3 {} +;
+    find "$i" -type f -exec chmod $4 {} +;
+  done;
+}
+file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
+getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
+abort() { ui_print "$*"; umount /system; umount /data; exit 1; }
+
+show_progress 1.34 4;
+mkdir -p /tmp/anykernel/bin;
+cd /tmp/anykernel;
+unzip -o "$ZIP";
+if [ $? != 0 -o -z "$(ls /tmp/anykernel/tools)" ]; then
+  abort "Unzip failed. Aborting...";
+fi;
+chmod -R 755 /tmp/anykernel/tools /tmp/anykernel/bin;
+bb=/tmp/anykernel/tools/busybox;
+
+ui_print " ";
+ui_print "$(file_getprop /tmp/anykernel/anykernel.sh kernel.string)";
+mount -o rw /system;
+mount /data;
+
+cp -f /tmp/anykernel/tools/getprop /sbin/;
+cp -f /tmp/anykernel/tools/busybox /system/xbin/;
+cp -f /tmp/anykernel/tools/busybox /system/bin/;
+cp -f /tmp/anykernel/tools/busybox /sbin/;
+rm -f /system/etc/init.d/UKM;
+rm -f /system/lib/modules/msm_core_ctl.ko;
+rm -f /system/lib/modules/hcube.ko;
+ui_print " ";
+
+ui_print "               OnePlus-2 Kernel                   ";
+ui_print "--------------------------------------------------";
+ui_print "                                                  ";
+ui_print "      ____  _            ____        _ _          ";
+ui_print "     | __ )| |_   _  ___| __ )  ___ | | |_        ";
+ui_print "     |  _ \| | | | |/ _ \  _ \ / _ \| | __|       ";
+ui_print "     | |_) | | |_| |  __/ |_) | (_) | | |_        ";
+ui_print "     |____/|_|\__,_|\___|____/ \___/|_|\__|       ";
+ui_print "                                                  ";
+ui_print "                                                  ";
+ui_print "--------------------------------------------------";
+ui_print "BlueBolt Kernel for ANDROID OREO and PIE ";
+ui_print "Beta 4.0";
+ui_print "By - Shreyansh Lodha";
+
+if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.devicecheck)" == 1 ]; then
+  ui_print "Checking device...";
+  for i in 1 2 3 4 5; do
+    testname="$(file_getprop /tmp/anykernel/anykernel.sh device.name$i)";
+    if [ "$(getprop ro.product.device)" == "$testname" -o "$(getprop ro.build.product)" == "$testname" ]; then
+      ui_print " Your Build Product is: $testname";
+      match=1;
+    fi;
+  done;
+  if [ "$match" != 1 ]; then
+    abort "Unsupported device. Aborting...";
+  fi;
+fi;
+
+
+
+
+
+ui_print "Installing kernel...";
+ui_print " ";
+for i in $($bb --list); do
+  $bb ln -s $bb /tmp/anykernel/bin/$i;
+done;
+if [ $? != 0 -o -z "$(ls /tmp/anykernel/bin)" ]; then
+  abort "Recovery busybox setup failed. Aborting...";
+fi;
+PATH="/tmp/anykernel/bin:$PATH" $bb ash /tmp/anykernel/anykernel.sh $2;
+if [ $? != "0" ]; then
+  abort;
+fi;
+
+if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.modules)" == 1 ]; then
+	ui_print "Installing BlueBolt Modules";
+	ui_print " ";
+
+	mount -o remount,rw -t auto /system;
+	if [ ! -d $root/system/lib/modules ]; then
+	    mkdir -p $root/system/lib/modules;
+	fi;
+	rm -rf $root/system/lib/modules/*;
+	cp -rf /tmp/anykernel/modules/* $root/system/lib/modules/;
+	set_perm_recursive 0 0 0755 0644 $root/system/lib/modules;
+	mount -o remount,ro -t auto /system;
+fi;
+
+if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.cleanup)" == 1 ]; then
+  rm -rf /tmp/anykernel;
+fi;
+
+
+
+
+
+
+
+umount /system;
+umount /data;
+ui_print " ";
+ui_print "Done...";
+ui_print " ";
