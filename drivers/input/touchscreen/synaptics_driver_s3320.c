@@ -2462,13 +2462,13 @@ static int init_synaptics_proc(void)
 		printk(KERN_INFO"init_synaptics_proc: Couldn't create proc entry\n");
 	}
 
-	proc_create("double_tap", 0666, prEntry_tp, &DouTap_proc_fops);
+	proc_create("double_tap_enable", 0666, prEntry_tp, &DouTap_proc_fops);
 	proc_create("draw_v", 0666, prEntry_tp, &UpVee_proc_fops);
-	proc_create("draw_reversed_v", 0666, prEntry_tp, &DownVee_proc_fops);
-	proc_create("draw_right_v", 0666, prEntry_tp, &RightVee_proc_fops);
-	proc_create("draw_left_v", 0666, prEntry_tp, &LeftVee_proc_fops);
-	proc_create("draw_circle", 0666, prEntry_tp, &Circle_proc_fops);
-	proc_create("double_swipe", 0666, prEntry_tp, &DouSwip_proc_fops);
+	proc_create("down_arrow_enable", 0666, prEntry_tp, &DownVee_proc_fops);
+	proc_create("right_arrow_enable", 0666, prEntry_tp, &RightVee_proc_fops);
+	proc_create("left_arrow_enable", 0666, prEntry_tp, &LeftVee_proc_fops);
+	proc_create("letter_o_enable", 0666, prEntry_tp, &Circle_proc_fops);
+	proc_create("double_swipe_enable", 0666, prEntry_tp, &DouSwip_proc_fops);
 	proc_create("right_swipe", 0666, prEntry_tp, &Left2RightSwip_proc_fops);
 	proc_create("left_swipe", 0666, prEntry_tp, &Right2LeftSwip_proc_fops);
 	proc_create("down_swipe", 0666, prEntry_tp, &Up2DownSwip_proc_fops);
